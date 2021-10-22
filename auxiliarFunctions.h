@@ -34,6 +34,8 @@ bool existsImage(Mat pColorImage){
     }
 }
 
+
+
 void uploadImageInfo(vector<vector<Pixel>> &pImageInfo){
     /*
     Purpose: 
@@ -42,9 +44,12 @@ void uploadImageInfo(vector<vector<Pixel>> &pImageInfo){
         -Recieves an empty matrix who is going to be filled with RGB colors.
     Returns: 
         -Nothing. Void
-    */
     
-    string imagePath = "C:/Users/luist/OneDrive/Escritorio/GeneticAlgorithms/Laberinto.jpg";
+    imagePath:
+        - "C:/Users/Sebastian/Desktop/TEC/IVSemestre/Analisis de algoritmos/GeneticAlgorithms/Laberinto.jpg"
+        - "C:/Users/luist/OneDrive/Escritorio/GeneticAlgorithms/Laberinto.jpg"
+    */
+    string imagePath = "C:/Users/Sebastian/Desktop/TEC/IVSemestre/Analisis de algoritmos/GeneticAlgorithms/Laberinto.png";
     Mat colorImage = imread(imagePath);
     int blueChannel; int greenChannel; int redChannel;
     if(existsImage(colorImage)){
@@ -64,8 +69,6 @@ void uploadImageInfo(vector<vector<Pixel>> &pImageInfo){
     else{
         exit(1);
     }
-    
-    
 }
 
 int getElementPosition(vector<Pixel> &pixels, Pixel &searchElement){

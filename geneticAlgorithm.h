@@ -8,9 +8,9 @@
 
 using namespace std;
 
-void generateInitialPixels(vector<Pixel> &initialPixels,vector<vector<Pixel>> &pImageInfo, Mat &image){
-    int maxX = 100;
-    int maxY = 100;
+void generateInitialPixels(vector<Pixel> &initialPixels,vector<vector<Pixel>> &pImageInfo, Mat &imageFirstPopulation){
+    int maxX = 94;
+    int maxY = 94;
     map<int,int> xPositionsUsed;
     map<int,int> yPositionsUsed;
 
@@ -36,22 +36,85 @@ void generateInitialPixels(vector<Pixel> &initialPixels,vector<vector<Pixel>> &p
         pImageInfo[x][y].setBlue(20);
 
         // set pixel
-        image.at<Vec3b>(x,y) = Vec3b(20,0,180);
-        imshow("windowName",image);
+        imageFirstPopulation.at<Vec3b>(x,y) = Vec3b(20,0,180);
+        imshow("windowName",imageFirstPopulation);
     }
 }
 
-void mainGenetic(){
-    vector<Pixel> initialPixels(50);
-    int dimensionX = 100;
-    int dimensionY = 100;
-    string imagePath = "C:/Users/Sebastian/Desktop/TEC/IVSemestre/Analisis de algoritmos/GeneticAlgorithms/Laberinto.png";
-    Mat image = imread(imagePath);
+string importantColourFound(Pixel pixel){
+    int redValue = pixel.getRed();
+    int greenValue = pixel.getGreen();
+    int blueValue = pixel.getBlue();
     
-    vector<vector<Pixel>> imageInfo( dimensionX , vector<Pixel> (dimensionY));
+    bool itsGrey = redValue && greenValue && blueValue;
+
+    if(){     //Check if its white
+
+    }
+    else{
+        if(){ //Check if its green
+
+        }
+        else{
+            if(){  //Check if its blue
+
+            }
+            else{    //Then its black
+
+            }
+
+        }
+    }
+
+}
+
+float individualFitness(vector<vector<Pixel>> &pCleanImage,Pixel pixel){
+    int rangeSearched = 5;
+    int x = pixel.getPositionX();
+    int y = pixel.getPositionY();
+
+    float pixelFitness = 0.0;
+
+    
+    for(int search = 1;search<=rangeSearched;search++){
+        //Upside search
+        if((importantColourFound(pCleanImage[x-search][y]))){
+
+        }
+    }
+
+}
+
+float calculateFitness(vector<Pixel> &initialPixels,vector<vector<Pixel>> &pCleanImage){
+
+    for(int idx = 0; idx<initialPixels.size();idx++){
+        initialPixels[idx].setFitness(individualFitness(pCleanImage,initialPixels[idx]));
+    }
+
+
+}
+
+
+void mainGenetic(){
+    vector<Pixel> initialPixels(50); //Initiliaze the vector of the initial pixels to choose
+
+    int dimensionX = 100; //Dimensions of the images
+    int dimensionY = 100;
+
+    string imagePath = "C:/Users/luist/OneDrive/Escritorio/GeneticAlgorithms/Laberinto.png"; //Path of the image
+
+    Mat imageFirstPopulation = imread(imagePath);
+    
+    vector<vector<Pixel>> imageInfo( dimensionX , vector<Pixel> (dimensionY));        //Generate initial poblation
     uploadImageInfo(imageInfo);
 
-    generateInitialPixels(initialPixels,imageInfo, image);
+    vector<vector<Pixel>> cleanImage( dimensionX , vector<Pixel> (dimensionY));        //Stores the original copy of the image
+    uploadImageInfo(cleanImage);
+
+    generateInitialPixels(initialPixels,imageInfo, imageFirstPopulation);
+
+
+
     for(int a = 0;a<initialPixels.size();a++){
         initialPixels[a].printPixel();
     }

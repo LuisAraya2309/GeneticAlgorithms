@@ -5,6 +5,7 @@ using namespace std;
 class Pixel{
     //Atributes
     int redValue, greenValue,blueValue,positionX,positionY;
+    float fitness; 
 
     //Constructor
 
@@ -15,21 +16,22 @@ class Pixel{
             this->blueValue = 0;
             this->positionX = 0;
             this->positionY = 0;
+            this->fitness = 0.0;
         }
 
 
-        Pixel(int pRedValue,int pGreenValue,int pBlueGreen,int pX,int pY){
+        Pixel(int pRedValue,int pGreenValue,int pBlueGreen,int pX,int pY,float  pFitness){
 
             this->redValue = pRedValue;
             this->greenValue = pGreenValue;
             this->blueValue = pBlueGreen;
             this->positionX = pX;
             this->positionY = pY;
-
+            this->fitness = pFitness;
         }
 
         void printPixel(){
-            cout<<"R: "<<redValue<<" ,G: "<<greenValue<<" ,B: "<<blueValue<<" ,X: "<<positionX<<" ,Y: "<<positionY<<endl;
+            cout<<"R: "<<redValue<<" ,G: "<<greenValue<<" ,B: "<<blueValue<<" ,X: "<<positionX<<" ,Y: "<<positionY<<" ,Fitness: "<<fitness<<endl;
         }
 
         void printPixelSegment(){
@@ -58,6 +60,10 @@ class Pixel{
             positionY = pY;
         }
 
+        void setFitness(int pFitness){
+            fitness = pFitness;
+        }
+
         // Getter
 
         int getRed() {
@@ -77,5 +83,8 @@ class Pixel{
         }
         int getPositionY(){
             return positionY;
+        }
+        float getFitness(){
+            return fitness;
         }
 };

@@ -13,7 +13,7 @@ bool existsImage(Mat pColorImage){
     Purpose: 
         -Verify if an image exists or not.
     Paramateres: 
-        -Recieves a Mat type variable, with the selected image.
+        -Receives a Mat type variable, with the selected image.
     Returns: 
         -True or false, it depends if the image was found or not.
     */
@@ -47,9 +47,9 @@ void uploadImageInfo(vector<vector<Pixel>> &pImageInfo){
     
     imagePath:
         - "C:/Users/Sebastian/Desktop/TEC/IVSemestre/Analisis de algoritmos/GeneticAlgorithms/Laberinto.jpg"
-        - "C:/Users/luist/OneDrive/Escritorio/GeneticAlgorithms/Laberinto.jpg"
+        - "C:/Users/luist/OneDrive/Escritorio/GeneticAlgorithms/Laberinto.png"
     */
-    string imagePath = "C:/Users/Sebastian/Desktop/TEC/IVSemestre/Analisis de algoritmos/GeneticAlgorithms/Laberinto.png";
+    string imagePath = "C:/Users/luist/OneDrive/Escritorio/GeneticAlgorithms/Laberinto.png";
     Mat colorImage = imread(imagePath);
     int blueChannel; int greenChannel; int redChannel;
     if(existsImage(colorImage)){

@@ -9,16 +9,16 @@
 using namespace std;
 
 void generateInitialPixels(vector<Pixel> &initialPixels,vector<vector<Pixel>> &pImageInfo, Mat &imageFirstPopulation){
-    int maxX = 94;
-    int maxY = 94;
+    int max = 94;
+    int min = 6;
     map<int,int> xPositionsUsed;
     map<int,int> yPositionsUsed;
 
     for(int idx = 0;idx<initialPixels.size();idx++){
         int x , y;
         while (true){
-            x = rand() % maxX;
-            y = rand() % maxY;
+            x = rand() % max + min;
+            y = rand() % max + min;
             if((xPositionsUsed.count(x)==0) && (yPositionsUsed.count(y)==0)){
                 break;
             }
@@ -28,7 +28,7 @@ void generateInitialPixels(vector<Pixel> &initialPixels,vector<vector<Pixel>> &p
         int redChannel = pImageInfo[x][y].getRed();
         int greenChannel = pImageInfo[x][y].getGreen();
         int blueChannel = pImageInfo[x][y].getBlue();
-        initialPixels[idx] = Pixel(redChannel,greenChannel,blueChannel,x,y);
+        initialPixels[idx] = Pixel(redChannel,greenChannel,blueChannel,x,y,0.0);
 
         //Set the first population in the maze matrix 
         pImageInfo[x][y].setRed(180);
@@ -48,19 +48,19 @@ string importantColourFound(Pixel pixel){
     
     bool itsGrey = redValue && greenValue && blueValue;
 
-    if(){     //Check if its white
-
+    if((redValue == 255) && (greenValue == 255) && (blueValue == 255)){     //Check if its white
+        return "White";
     }
     else{
-        if(){ //Check if its green
-
+        if((redValue == 34) && (greenValue == 177) && (blueValue == 76)){ //Check if its green
+            return "Green";
         }
         else{
-            if(){  //Check if its blue
-
+            if((redValue == 63) && (greenValue == 72) && (blueValue == 204)){  //Check if its blue
+                return "Blue";
             }
             else{    //Then its black
-
+                return "Black";
             }
 
         }
@@ -78,20 +78,26 @@ float individualFitness(vector<vector<Pixel>> &pCleanImage,Pixel pixel){
     
     for(int search = 1;search<=rangeSearched;search++){
         //Upside search
-        if((importantColourFound(pCleanImage[x-search][y]))){
+        if(("White" == importantColourFound(pCleanImage[x-search][y])) || ("White" == importantColourFound(pCleanImage[x+search][y])) || ("White" == importantColourFound(pCleanImage[x][y+search])) || ("White" == importantColourFound(pCleanImage[x][y-search])) ){
+            pixelFitness +=  1.0;
+        }
 
+        if(("Green" == importantColourFound(pCleanImage[x-search][y])) || ("Green" == importantColourFound(pCleanImage[x+search][y])) || ("Green" == importantColourFound(pCleanImage[x][y+search])) || ("Green" == importantColourFound(pCleanImage[x][y-search])) ){
+            pixelFitness += 1.5;
+        }
+
+        if(("Blue" == importantColourFound(pCleanImage[x-search][y])) || ("Blue" == importantColourFound(pCleanImage[x+search][y])) || ("Blue" == importantColourFound(pCleanImage[x][y+search])) || ("Blue" == importantColourFound(pCleanImage[x][y-search])) ){
+            pixelFitness +=  1.5;
         }
     }
-
+    return pixelFitness;
 }
 
-float calculateFitness(vector<Pixel> &initialPixels,vector<vector<Pixel>> &pCleanImage){
+void calculateFitness(vector<Pixel> &initialPixels,vector<vector<Pixel>> &pCleanImage){
 
     for(int idx = 0; idx<initialPixels.size();idx++){
-        initialPixels[idx].setFitness(individualFitness(pCleanImage,initialPixels[idx]));
+        initialPixels[idx].setFitness(initialPixels[idx].getFitness() + individualFitness(pCleanImage,initialPixels[idx]));
     }
-
-
 }
 
 
@@ -101,7 +107,7 @@ void mainGenetic(){
     int dimensionX = 100; //Dimensions of the images
     int dimensionY = 100;
 
-    string imagePath = "C:/Users/luist/OneDrive/Escritorio/GeneticAlgorithms/Laberinto.png"; //Path of the image
+    string imagePath = "C:/Users/Sebastian/Desktop/TEC/IVSemestre/Analisis de algoritmos/GeneticAlgorithms/Laberinto.png"; //Path of the image
 
     Mat imageFirstPopulation = imread(imagePath);
     
@@ -113,9 +119,9 @@ void mainGenetic(){
 
     generateInitialPixels(initialPixels,imageInfo, imageFirstPopulation);
 
-
-
-    for(int a = 0;a<initialPixels.size();a++){
+    /*for(int a = 0;a<initialPixels.size();a++){
         initialPixels[a].printPixel();
-    }
+    }*/
+
+    calculateFitness(initialPixels,cleanImage);
 }

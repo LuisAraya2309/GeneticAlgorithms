@@ -60,7 +60,7 @@ class Pixel{
             positionY = pY;
         }
 
-        void setFitness(int pFitness){
+        void setFitness(float pFitness){
             fitness = pFitness;
         }
 

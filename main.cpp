@@ -1,6 +1,7 @@
 #include <iostream>
 #include <stdio.h>
 #include <vector>
+#include <random>
 #include "geneticAlgorithm.h"
 
 using namespace cv;

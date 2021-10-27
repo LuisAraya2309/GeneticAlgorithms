@@ -9,16 +9,16 @@
 using namespace std;
 
 void generateInitialPixels(vector<Pixel> &initialPixels,vector<vector<Pixel>> &pImageInfo, Mat &imageFirstPopulation){
-    int max = 94;
-    int min = 6;
+    int max = 90;
+    int min = 5;
     map<int,int> xPositionsUsed;
     map<int,int> yPositionsUsed;
 
     for(int idx = 0;idx<initialPixels.size();idx++){
         int x , y;
         while (true){
-            x = rand() % max + min;
-            y = rand() % max + min;
+            x = (rand() % max) + min;
+            y = (rand() % max) + min;
             if((xPositionsUsed.count(x)==0) && (yPositionsUsed.count(y)==0)){
                 break;
             }
@@ -97,6 +97,24 @@ void calculateFitness(vector<Pixel> &initialPixels,vector<vector<Pixel>> &pClean
 
     for(int idx = 0; idx<initialPixels.size();idx++){
         initialPixels[idx].setFitness(initialPixels[idx].getFitness() + individualFitness(pCleanImage,initialPixels[idx]));
+        cout<<initialPixels[idx].getPositionX()<<" , "<<initialPixels[idx].getPositionY()<<"  Fitness: "<<initialPixels[idx].getFitness()<<endl;
+    }
+}
+
+//NUEVOOOOOOOOOO
+vector<int> createNewPositions(vector<string> chainsPosition){
+    vector<int> newPositions;
+    int randomIndex;
+    
+    randomIndex = (rand() % chainsPosition.size());
+    
+}
+
+void cruce(vector<Pixel> &bestPixels){
+    vector<string> chainsPosition(2);
+    for(int idx = 0; idx<bestPixels.size();idx+=2){
+        chainsPosition = putTogetherChains(bestPixels[idx], bestPixels[idx + 1]);
+
     }
 }
 

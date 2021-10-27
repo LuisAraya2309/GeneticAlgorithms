@@ -8,6 +8,10 @@
 using namespace std;
 using namespace cv;
 
+using std::cout;
+using std::endl;
+using std::string;
+
 bool existsImage(Mat pColorImage){
     /*
     Purpose: 
@@ -96,4 +100,49 @@ int getElementPosition(vector<Pixel> &pixels, Pixel &searchElement){
     }
     return -1;    
 
+}
+
+double toBinary(int numberToConvert){
+    int exp, digito;
+    double binario;
+    exp=0;
+    binario=0;
+    while(numberToConvert/2!=0){
+        digito = numberToConvert % 2;
+        binario = binario + digito * pow(10.0,exp);
+        exp++;
+        numberToConvert=numberToConvert/2;
+    }
+    binario = binario + numberToConvert * pow(10.0,exp);
+    return binario;
+}
+
+double toDecimal(double numerToConvert){
+    int exp, digit;
+    double decimal;
+    exp = 0; decimal = 0;
+    while(((int)(numerToConvert/10))!=0){
+        digit = (int)numerToConvert % 10;
+        decimal = decimal + digit * pow(2.0,exp);
+        exp++;
+        numerToConvert = (int)(numerToConvert/10);
+    }
+    decimal=decimal + numerToConvert * pow(2.0,exp);
+
+    return decimal;
+}
+
+vector<string> putTogetherChains(Pixel firstPixel, Pixel secondPixel){
+    vector<string> chainsPositions(2);
+    double firstXPosition, secondXPosition, firstYPosition, secondYPosition;
+
+    firstXPosition = toBinary(firstPixel.getPositionX());
+    secondXPosition = toBinary(secondPixel.getPositionX());
+    firstYPosition = toBinary(firstPixel.getPositionY());
+    secondYPosition = toBinary(secondPixel.getPositionY());
+
+    chainsPositions[0] = to_string(firstXPosition) + to_string(firstYPosition);
+    chainsPositions[1] = to_string(secondXPosition) + to_string(secondYPosition);
+
+    return chainsPositions;
 }

@@ -101,20 +101,37 @@ void calculateFitness(vector<Pixel> &initialPixels,vector<vector<Pixel>> &pClean
     }
 }
 
-//NUEVOOOOOOOOOO
-vector<int> createNewPositions(vector<string> chainsPosition){
-    vector<int> newPositions;
-    int randomIndex;
+
+vector<double> createNewPositions(vector<string> chainsPosition){
+    vector<double> newPositions;
+    int randomIndex, middle;
+    string firstNewChain ,  secondNewChain;
     
-    randomIndex = (rand() % chainsPosition.size());
-    
+    randomIndex = (rand() % chainsPosition[0].size());
+    firstNewChain = chainsPosition[0].substr(0,randomIndex) + chainsPosition[1].substr(randomIndex) ;
+    secondNewChain = chainsPosition[1].substr(0,randomIndex) + chainsPosition[0].substr(randomIndex) ;
+    middle = firstNewChain.size()/2;
+
+    cout<<chainsPosition[0].substr(0,randomIndex)<< " + " << chainsPosition[1].substr(randomIndex)<<endl;
+    cout<<chainsPosition[1].substr(0,randomIndex)<< " + " << chainsPosition[0].substr(randomIndex)<<endl;
+
+    //Add new positions to vector
+    newPositions.push_back(toDecimal(std::stod(firstNewChain.substr(0,middle))));
+    newPositions.push_back(toDecimal(std::stod(firstNewChain.substr(middle))));
+    newPositions.push_back(toDecimal(std::stod(secondNewChain.substr(0,middle))));
+    newPositions.push_back(toDecimal(std::stod(secondNewChain.substr(middle))));
+
+    for (int i = 0; i<newPositions.size(); i++){
+        cout<<"Numero decimal: "<<newPositions[i]<<endl;
+    }
+    return newPositions;
 }
 
-void cruce(vector<Pixel> &bestPixels){
+void crossPixels(vector<Pixel> &bestPixels){
     vector<string> chainsPosition(2);
     for(int idx = 0; idx<bestPixels.size();idx+=2){
         chainsPosition = putTogetherChains(bestPixels[idx], bestPixels[idx + 1]);
-
+        createNewPositions(chainsPosition);
     }
 }
 

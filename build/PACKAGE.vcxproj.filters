@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <CustomBuild Include="C:\Users\Sebastian\Desktop\TEC\IVSemestre\Analisis de algoritmos\GeneticAlgorithms\build\CMakeFiles\583aa240affde2a01b2bba8ace2b3b3a\PACKAGE_force.rule">
+    <CustomBuild Include="C:\Users\luist\OneDrive\Escritorio\GeneticAlgorithms\build\CMakeFiles\e584c9e7efe54888b6e5563b04642e83\PACKAGE_force.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="CMake Rules">
-      <UniqueIdentifier>{3A86B5DC-13AC-32BD-9D9D-9C2D8608F0C5}</UniqueIdentifier>
+      <UniqueIdentifier>{1600096B-947F-348E-B46E-B784A5EC07A3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -2,13 +2,13 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>C:\Users\Sebastian\Desktop\TEC\IVSemestre\Analisis de algoritmos\GeneticAlgorithms\build\x64\Debug\ZERO_CHECK</FullPath>
+      <FullPath>C:\Users\luist\OneDrive\Escritorio\GeneticAlgorithms\build\x64\Debug\ZERO_CHECK</FullPath>
     </ProjectOutput>
     <ProjectOutput>
-      <FullPath>C:\Users\Sebastian\Desktop\TEC\IVSemestre\Analisis de algoritmos\GeneticAlgorithms\build\Debug\GeneticAlgorithms.exe</FullPath>
+      <FullPath>C:\Users\luist\OneDrive\Escritorio\GeneticAlgorithms\build\Debug\GeneticAlgorithms.exe</FullPath>
     </ProjectOutput>
     <ProjectOutput>
-      <FullPath>C:\Users\Sebastian\Desktop\TEC\IVSemestre\Analisis de algoritmos\GeneticAlgorithms\build\x64\Debug\ALL_BUILD</FullPath>
+      <FullPath>C:\Users\luist\OneDrive\Escritorio\GeneticAlgorithms\build\x64\Debug\ALL_BUILD</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />

@@ -97,7 +97,7 @@ void calculateFitness(vector<Pixel> &initialPixels,vector<vector<Pixel>> &pClean
 
     for(int idx = 0; idx<initialPixels.size();idx++){
         initialPixels[idx].setFitness(initialPixels[idx].getFitness() + individualFitness(pCleanImage,initialPixels[idx]));
-        cout<<initialPixels[idx].getPositionX()<<" , "<<initialPixels[idx].getPositionY()<<"  Fitness: "<<initialPixels[idx].getFitness()<<endl;
+        //cout<<initialPixels[idx].getPositionX()<<" , "<<initialPixels[idx].getPositionY()<<"  Fitness: "<<initialPixels[idx].getFitness()<<endl;
     }
 }
 
@@ -135,6 +135,50 @@ void crossPixels(vector<Pixel> &bestPixels){
     }
 }
 
+float maxFitness(vector<Pixel> &initialPixels){
+    float r = 0;
+    r = initialPixels[0].getFitness();
+    for (int i = 0; i < 5; i++) {
+        if (r < initialPixels[i].getFitness())   {
+
+            r = initialPixels[i].getFitness();
+        }
+
+    }
+    return r;
+}
+
+
+
+
+vector<Pixel> chooseBestPixels(vector<Pixel> &initialPixels){
+
+    vector<Pixel> bestPixels; //Initiliaze the vector of the best pixels to choose
+    int pixelsChosen = 0;
+    int idx = 0;
+    float topFitness = maxFitness(initialPixels);
+    while (pixelsChosen!=10){
+        float pixelFitness = initialPixels[idx].getFitness();
+        float chosenProbability = (pixelFitness*100)/topFitness;
+        float randomChoice = rand() % 100;
+        if(randomChoice<=chosenProbability && randomChoice!=0.0){
+            bestPixels.push_back(initialPixels[idx]);
+            pixelsChosen++;
+        }
+
+        if(idx+1 == initialPixels.size()){
+            idx = 0;
+        }
+        else{
+            idx++;
+        }
+            
+        
+    }
+
+    return bestPixels;
+} 
+
 
 void mainGenetic(){
     vector<Pixel> initialPixels(50); //Initiliaze the vector of the initial pixels to choose
@@ -142,7 +186,7 @@ void mainGenetic(){
     int dimensionX = 100; //Dimensions of the images
     int dimensionY = 100;
 
-    string imagePath = "C:/Users/Sebastian/Desktop/TEC/IVSemestre/Analisis de algoritmos/GeneticAlgorithms/Laberinto.png"; //Path of the image
+    string imagePath = "C:/Users/luist/OneDrive/Escritorio/GeneticAlgorithms/Laberinto.png"; //Path of the image
 
     Mat imageFirstPopulation = imread(imagePath);
     
@@ -152,11 +196,20 @@ void mainGenetic(){
     vector<vector<Pixel>> cleanImage( dimensionX , vector<Pixel> (dimensionY));        //Stores the original copy of the image
     uploadImageInfo(cleanImage);
 
-    generateInitialPixels(initialPixels,imageInfo, imageFirstPopulation);
+    generateInitialPixels(initialPixels,imageInfo, imageFirstPopulation);    //Generate the initial pixels for the array
 
-    /*for(int a = 0;a<initialPixels.size();a++){
-        initialPixels[a].printPixel();
-    }*/
+    calculateFitness(initialPixels,cleanImage);                             //Calculates the fitness of the initial poblation
 
-    calculateFitness(initialPixels,cleanImage);
+    vector<Pixel> bestPixels = chooseBestPixels(initialPixels);           //Choose the best pixels.
+    /*
+    for(int a = 0;a<bestPixels.size();a++){
+        cout<<"Fitness: " <<bestPixels[a].getFitness()<<endl;
+    }
+    */
+
+    cout<<"BEST PIXELSSSSSSSS"<<endl;
+    
+
+
+
 }

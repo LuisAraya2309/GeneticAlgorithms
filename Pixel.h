@@ -87,4 +87,8 @@ class Pixel{
         float getFitness(){
             return fitness;
         }
+
+        static bool compareByFitness(Pixel &a, Pixel &b) {
+            return a.fitness < b.fitness;
+    }
 };

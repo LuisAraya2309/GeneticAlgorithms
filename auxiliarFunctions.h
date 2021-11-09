@@ -53,7 +53,7 @@ void uploadImageInfo(vector<vector<Pixel>> &pImageInfo){
         - "C:/Users/Sebastian/Desktop/TEC/IVSemestre/Analisis de algoritmos/GeneticAlgorithms/Laberinto.png"
         - "C:/Users/luist/OneDrive/Escritorio/GeneticAlgorithms/Laberinto.png"
     */
-    string imagePath =  "C:/Users/luist/OneDrive/Escritorio/GeneticAlgorithms/Laberinto.png";
+    string imagePath =  "C:/Users/Sebastian/Desktop/TEC/IVSemestre/Analisis de algoritmos/GeneticAlgorithms/Laberinto.png";
     Mat colorImage = imread(imagePath);
     int blueChannel; int greenChannel; int redChannel;
     if(existsImage(colorImage)){
@@ -145,4 +145,35 @@ vector<string> putTogetherChains(Pixel firstPixel, Pixel secondPixel){
     chainsPositions[1] = to_string(secondXPosition) + to_string(secondYPosition);
 
     return chainsPositions;
+}
+
+
+bool checkNumber(vector<int> arrayNumbers, int number){
+
+    if(arrayNumbers.size() != 0){
+        for(int index=0; index< arrayNumbers.size(); index++){
+            if(arrayNumbers[index] == number){
+                cout<<"Retorna falso"<<endl;
+                return false;
+            }
+        }
+        return true;
+    }else{
+        return true;
+    }
+    
+}
+
+
+vector<int> generateRandoms(int size){
+    vector<int> arrayNumbers;
+    int randomNumber;
+    while (arrayNumbers.size()<3){
+        randomNumber = (rand() % size + 0);
+        if(checkNumber(arrayNumbers, randomNumber)){
+            arrayNumbers.push_back(randomNumber);
+            cout<<"Numero a insertar: "<<randomNumber<<endl;
+        }
+    }
+    return arrayNumbers;
 }

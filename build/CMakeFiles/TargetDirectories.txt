@@ -1,9 +1,9 @@
-C:/Users/luist/OneDrive/Escritorio/GeneticAlgorithms/build/CMakeFiles/NightlyMemoryCheck.dir
-C:/Users/luist/OneDrive/Escritorio/GeneticAlgorithms/build/CMakeFiles/Experimental.dir
-C:/Users/luist/OneDrive/Escritorio/GeneticAlgorithms/build/CMakeFiles/Continuous.dir
-C:/Users/luist/OneDrive/Escritorio/GeneticAlgorithms/build/CMakeFiles/Nightly.dir
-C:/Users/luist/OneDrive/Escritorio/GeneticAlgorithms/build/CMakeFiles/GeneticAlgorithms.dir
-C:/Users/luist/OneDrive/Escritorio/GeneticAlgorithms/build/CMakeFiles/PACKAGE.dir
-C:/Users/luist/OneDrive/Escritorio/GeneticAlgorithms/build/CMakeFiles/RUN_TESTS.dir
-C:/Users/luist/OneDrive/Escritorio/GeneticAlgorithms/build/CMakeFiles/ALL_BUILD.dir
-C:/Users/luist/OneDrive/Escritorio/GeneticAlgorithms/build/CMakeFiles/ZERO_CHECK.dir
+C:/Users/Sebastian/Desktop/TEC/IVSemestre/Analisis de algoritmos/GeneticAlgorithms/build/CMakeFiles/NightlyMemoryCheck.dir
+C:/Users/Sebastian/Desktop/TEC/IVSemestre/Analisis de algoritmos/GeneticAlgorithms/build/CMakeFiles/Experimental.dir
+C:/Users/Sebastian/Desktop/TEC/IVSemestre/Analisis de algoritmos/GeneticAlgorithms/build/CMakeFiles/Continuous.dir
+C:/Users/Sebastian/Desktop/TEC/IVSemestre/Analisis de algoritmos/GeneticAlgorithms/build/CMakeFiles/Nightly.dir
+C:/Users/Sebastian/Desktop/TEC/IVSemestre/Analisis de algoritmos/GeneticAlgorithms/build/CMakeFiles/GeneticAlgorithms.dir
+C:/Users/Sebastian/Desktop/TEC/IVSemestre/Analisis de algoritmos/GeneticAlgorithms/build/CMakeFiles/PACKAGE.dir
+C:/Users/Sebastian/Desktop/TEC/IVSemestre/Analisis de algoritmos/GeneticAlgorithms/build/CMakeFiles/RUN_TESTS.dir
+C:/Users/Sebastian/Desktop/TEC/IVSemestre/Analisis de algoritmos/GeneticAlgorithms/build/CMakeFiles/ALL_BUILD.dir
+C:/Users/Sebastian/Desktop/TEC/IVSemestre/Analisis de algoritmos/GeneticAlgorithms/build/CMakeFiles/ZERO_CHECK.dir

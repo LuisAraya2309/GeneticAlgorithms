@@ -1,6 +1,6 @@
-^C:\USERS\LUIST\ONEDRIVE\ESCRITORIO\GENETICALGORITHMS\BUILD\CMAKEFILES\E584C9E7EFE54888B6E5563B04642E83\GENERATE.STAMP.RULE
+^C:\USERS\SEBASTIAN\DESKTOP\TEC\IVSEMESTRE\ANALISIS DE ALGORITMOS\GENETICALGORITHMS\BUILD\CMAKEFILES\583AA240AFFDE2A01B2BBA8ACE2B3B3A\GENERATE.STAMP.RULE
 setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/luist/OneDrive/Escritorio/GeneticAlgorithms -BC:/Users/luist/OneDrive/Escritorio/GeneticAlgorithms/build --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/Users/luist/OneDrive/Escritorio/GeneticAlgorithms/build/GeneticAlgorithms.sln
+"C:\Program Files\CMake\bin\cmake.exe" "-SC:/Users/Sebastian/Desktop/TEC/IVSemestre/Analisis de algoritmos/GeneticAlgorithms" "-BC:/Users/Sebastian/Desktop/TEC/IVSemestre/Analisis de algoritmos/GeneticAlgorithms/build" --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file "C:/Users/Sebastian/Desktop/TEC/IVSemestre/Analisis de algoritmos/GeneticAlgorithms/build/GeneticAlgorithms.sln"
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone

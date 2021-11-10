@@ -159,15 +159,24 @@ vector<int> createNewPositions(vector<string> chainsPosition){
     default_random_engine eng(rd());
     uniform_int_distribution<int> distr(0, chainsPosition[0].size()-1);
     randomIndex = (distr(eng));
+
+    cout<<"Antes de formar las nuevas cadenas"<<endl;
+
+    cout<<"Primera cadena: "<<chainsPosition[0]<<endl;
+    cout<<"Segunda cadena: "<<chainsPosition[1]<<endl;
+
     firstNewChain = chainsPosition[0].substr(0,randomIndex) + chainsPosition[1].substr(randomIndex) ;
     secondNewChain = chainsPosition[1].substr(0,randomIndex) + chainsPosition[0].substr(randomIndex) ;
     middle = firstNewChain.size()/2;
+
+    cout<<"despues de intercambiar cadenas"<<endl;
 
     FNCbegin = firstNewChain.substr(0,middle);
     FNCend = firstNewChain.substr(middle);
     SNCbegin = secondNewChain.substr(0,middle);
     SNCend = secondNewChain.substr(middle);
 
+    cout<<"Antes de mutaciones"<<endl;
 
     int probabilityNumber = (distr(eng) % 100);
     if(probabilityNumber<=10){
@@ -179,14 +188,63 @@ vector<int> createNewPositions(vector<string> chainsPosition){
     string disAdjustedPositions[4] = {FNCbegin,FNCend,SNCbegin,SNCend};
     adjustedPositions = adjustNewPositions(disAdjustedPositions);
 
-    /*
+    
     cout<<"NEW POSITIONS"<<endl;
     for(int z =0;z<4;z++){
         cout<<adjustedPositions[z]<<endl;
     }
-    */
+    
     return adjustedPositions;
 }
+
+vector<int> squareCross(Pixel firstPixel , Pixel secondPixel){
+
+    vector<int> newPositions;
+
+    int x1 = firstPixel.getPositionX();
+    int y1 = firstPixel.getPositionY();
+    int x2 = secondPixel.getPositionX();
+    int y2 = secondPixel.getPositionY();
+    int newX1, newX2, newY1, newY2;
+
+    random_device rd;
+    default_random_engine eng(rd());
+    
+    if(x1 < x2){
+        uniform_int_distribution<int> distr(x1, x2);
+        newX1 = distr(eng); 
+        newX2 = distr(eng); 
+
+    }else{
+        uniform_int_distribution<int> distr(x2, x1);
+        newX1 = distr(eng); 
+        newX2 = distr(eng); 
+
+    }
+    
+    random_device rd2;
+    default_random_engine eng2(rd2());
+
+    if(x1 < x2){
+        uniform_int_distribution<int> distr2(y1, y2);
+        newY1 = distr2(eng2);
+        newY2 = distr2(eng2);
+    }else{
+        uniform_int_distribution<int> distr2(y2, y1);
+        newY1 = distr2(eng2);
+        newY2 = distr2(eng2);
+    }
+
+
+    newPositions.push_back(newX1);
+    newPositions.push_back(newY1);
+    newPositions.push_back(newX2);
+    newPositions.push_back(newY2);
+
+    return newPositions;
+
+}
+
 
 vector<Pixel> crossPixels(vector<Pixel> &bestPixels, Mat &imageFirstPopulation ){
     vector<string> chainsPosition;
@@ -194,10 +252,21 @@ vector<Pixel> crossPixels(vector<Pixel> &bestPixels, Mat &imageFirstPopulation )
     vector<Pixel> newPopulation;
 
     vector<int> randomIndexes = generateRandoms(9,10);
+
+    random_device rd;
+    default_random_engine eng(rd());
+    uniform_int_distribution<int> distr(0,1);
     
     for(int idx = 0; idx<bestPixels.size();idx+=2){
-        chainsPosition = putTogetherChains(bestPixels[randomIndexes[idx]], bestPixels[randomIndexes[idx]]);
-        newPositions = createNewPositions(chainsPosition);
+
+       /*if(distr(eng) == 1){*/
+            chainsPosition = putTogetherChains(bestPixels[randomIndexes[idx]], bestPixels[randomIndexes[idx+1]]);
+            newPositions = createNewPositions(chainsPosition);
+            cout<<"Despues de CreateNewPos"<<endl;
+        /*}else{
+            newPositions = squareCross(bestPixels[randomIndexes[idx]], bestPixels[randomIndexes[idx+1]]);
+        }*/
+       
         //Create an array of new pixels
         newPopulation.push_back(Pixel(180,0,20,newPositions[0],newPositions[1],0));
         newPopulation.push_back(Pixel(180,0,20,newPositions[2],newPositions[3],0));
@@ -271,7 +340,7 @@ void mainGenetic(){
     int dimensionX = 100; //Dimensions of the images
     int dimensionY = 100;
 
-    string imagePath = "C:/Users/luist/OneDrive/Escritorio/GeneticAlgorithms/Laberinto.png"; //Path of the image
+    string imagePath = "C:/Users/Sebastian/Desktop/TEC/IVSemestre/Analisis de algoritmos/GeneticAlgorithms/Laberinto.png"; //Path of the image
 
     Mat imageFirstPopulation = imread(imagePath);
     Mat draftImage = imageFirstPopulation;
@@ -283,7 +352,12 @@ void mainGenetic(){
     uploadImageInfo(cleanImage);
 
     generateInitialPixels(initialPixels,imageInfo, imageFirstPopulation);    //Generate the initial pixels for the array
-
+    cout<<"Poblacion Inicial: "<<endl;
+    for(int idx = 0;idx<50;idx++){
+        Pixel p = initialPixels[idx];
+        cout<<"Posicion en X "<<p.getPositionX()<<" - Posicion en Y "<<p.getPositionY()<<endl;
+    }
+    int generation = 0;
     double avgFitness = 0.0;
     while(avgFitness<=5){
 
@@ -295,12 +369,14 @@ void mainGenetic(){
         vector<Pixel> newPixelPopulation = crossPixels(bestPixels, newImage);
         replaceFirstPopulation(initialPixels, newPixelPopulation);
         avgFitness = averageFitness(initialPixels);
+        generation++;
     }
     cout<<"Resultado final"<<endl;
     Mat finalImage = imread(imagePath);
+    cout<<"Generacion "<<generation<<endl;
     for(int idx = 0;idx<50;idx++){
         Pixel p = initialPixels[idx];
-        cout<<"Posicion en X "<<p.getPositionX()<<"- Posicion en Y "<<p.getPositionY()<<endl;
+        cout<<"Posicion en X "<<p.getPositionX()<<" - Posicion en Y "<<p.getPositionY()<<endl;
         finalImage.at<Vec3b>(p.getPositionX(),p.getPositionY()) = Vec3b(20,0,180);
     }
     imshow("Final",finalImage);

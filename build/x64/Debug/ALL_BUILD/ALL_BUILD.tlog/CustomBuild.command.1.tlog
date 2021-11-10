@@ -1,6 +1,6 @@
-^C:\USERS\SEBASTIAN\DESKTOP\TEC\IVSEMESTRE\ANALISIS DE ALGORITMOS\GENETICALGORITHMS\CMAKELISTS.TXT
+^C:\USERS\LUIST\ONEDRIVE\ESCRITORIO\GENETICALGORITHMS\CMAKELISTS.TXT
 setlocal
-"C:\Program Files\CMake\bin\cmake.exe" "-SC:/Users/Sebastian/Desktop/TEC/IVSemestre/Analisis de algoritmos/GeneticAlgorithms" "-BC:/Users/Sebastian/Desktop/TEC/IVSemestre/Analisis de algoritmos/GeneticAlgorithms/build" --check-stamp-file "C:/Users/Sebastian/Desktop/TEC/IVSemestre/Analisis de algoritmos/GeneticAlgorithms/build/CMakeFiles/generate.stamp"
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/luist/OneDrive/Escritorio/GeneticAlgorithms -BC:/Users/luist/OneDrive/Escritorio/GeneticAlgorithms/build --check-stamp-file C:/Users/luist/OneDrive/Escritorio/GeneticAlgorithms/build/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone

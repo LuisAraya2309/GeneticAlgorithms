@@ -53,7 +53,7 @@ void uploadImageInfo(vector<vector<Pixel>> &pImageInfo){
         - "C:/Users/Sebastian/Desktop/TEC/IVSemestre/Analisis de algoritmos/GeneticAlgorithms/Laberinto.png"
         - "C:/Users/luist/OneDrive/Escritorio/GeneticAlgorithms/Laberinto.png"
     */
-    string imagePath =  "C:/Users/Sebastian/Desktop/TEC/IVSemestre/Analisis de algoritmos/GeneticAlgorithms/Laberinto.png";
+    string imagePath =  "C:/Users/luist/OneDrive/Escritorio/GeneticAlgorithms/Laberinto.png";
     Mat colorImage = imread(imagePath);
     int blueChannel; int greenChannel; int redChannel;
     if(existsImage(colorImage)){
@@ -102,18 +102,18 @@ int getElementPosition(vector<Pixel> &pixels, Pixel &searchElement){
 
 }
 
-double toBinary(int numberToConvert){
+int toBinary(int numberToConvert){
     int exp, digito;
-    double binario;
+    int binario;
     exp=0;
     binario=0;
     while(numberToConvert/2!=0){
         digito = numberToConvert % 2;
-        binario = binario + digito * pow(10.0,exp);
+        binario = binario + digito * pow(10,exp);
         exp++;
         numberToConvert=numberToConvert/2;
     }
-    binario = binario + numberToConvert * pow(10.0,exp);
+    binario = binario + numberToConvert * pow(10,exp);
     return binario;
 }
 
@@ -143,8 +143,32 @@ vector<string> putTogetherChains(Pixel firstPixel, Pixel secondPixel){
 
     chainsPositions[0] = to_string(firstXPosition) + to_string(firstYPosition);
     chainsPositions[1] = to_string(secondXPosition) + to_string(secondYPosition);
+    
+    int lenFirst = chainsPositions[0].length();
+    int lenSecond = chainsPositions[1].length();
+    int neededBits;
+    int idxChanged;
+    string filledChain;
+    if(lenFirst<lenSecond){
+        neededBits = lenSecond - lenFirst;
+        filledChain = chainsPositions[0];
+        idxChanged = 0;
+    }
+    else if (lenFirst == lenSecond){
+        return chainsPositions;
+    }
+    else{
+        neededBits =lenFirst - lenSecond;
+        filledChain = chainsPositions[1];
+        idxChanged = 1;
+    }
 
+    for(int filling = 0;filling<neededBits;filling++){
+        filledChain = "0" + filledChain;
+    }
+    chainsPositions[idxChanged] = filledChain;
     return chainsPositions;
+    
 }
 
 

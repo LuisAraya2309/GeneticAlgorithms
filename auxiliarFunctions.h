@@ -53,7 +53,7 @@ void uploadImageInfo(vector<vector<Pixel>> &pImageInfo){
         - "C:/Users/Sebastian/Desktop/TEC/IVSemestre/Analisis de algoritmos/GeneticAlgorithms/Laberinto.png"
         - "C:/Users/luist/OneDrive/Escritorio/GeneticAlgorithms/Laberinto.png"
     */
-    string imagePath =  "C:/Users/Sebastian/Desktop/TEC/IVSemestre/Analisis de algoritmos/GeneticAlgorithms/Laberinto.png";
+    string imagePath =  "C:/Users/luist/OneDrive/Escritorio/GeneticAlgorithms/Laberinto.png";
     Mat colorImage = imread(imagePath);
     int blueChannel; int greenChannel; int redChannel;
     if(existsImage(colorImage)){
@@ -117,9 +117,9 @@ double toBinary(int numberToConvert){
     return binario;
 }
 
-double toDecimal(double numerToConvert){
+int toDecimal(int numerToConvert){
     int exp, digit;
-    double decimal;
+    int decimal;
     exp = 0; decimal = 0;
     while(((int)(numerToConvert/10))!=0){
         digit = (int)numerToConvert % 10;
@@ -134,7 +134,7 @@ double toDecimal(double numerToConvert){
 
 vector<string> putTogetherChains(Pixel firstPixel, Pixel secondPixel){
     vector<string> chainsPositions(2);
-    double firstXPosition, secondXPosition, firstYPosition, secondYPosition;
+    int firstXPosition, secondXPosition, firstYPosition, secondYPosition;
 
     firstXPosition = toBinary(firstPixel.getPositionX());
     secondXPosition = toBinary(secondPixel.getPositionX());
@@ -153,7 +153,6 @@ bool checkNumber(vector<int> arrayNumbers, int number){
     if(arrayNumbers.size() != 0){
         for(int index=0; index< arrayNumbers.size(); index++){
             if(arrayNumbers[index] == number){
-                cout<<"Retorna falso"<<endl;
                 return false;
             }
         }
@@ -165,14 +164,16 @@ bool checkNumber(vector<int> arrayNumbers, int number){
 }
 
 
-vector<int> generateRandoms(int size){
+vector<int> generateRandoms(int size,int randomAmount){
     vector<int> arrayNumbers;
     int randomNumber;
-    while (arrayNumbers.size()<3){
-        randomNumber = (rand() % size + 0);
+    while (arrayNumbers.size()<randomAmount){
+        random_device rd;
+        default_random_engine eng(rd());
+        uniform_int_distribution<int> distr(0, size);
+        randomNumber = (distr(eng));
         if(checkNumber(arrayNumbers, randomNumber)){
             arrayNumbers.push_back(randomNumber);
-            cout<<"Numero a insertar: "<<randomNumber<<endl;
         }
     }
     return arrayNumbers;

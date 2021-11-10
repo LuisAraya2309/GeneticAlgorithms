@@ -18,8 +18,12 @@ void generateInitialPixels(vector<Pixel> &initialPixels,vector<vector<Pixel>> &p
     for(int idx = 0;idx<initialPixels.size();idx++){
         int x , y;
         while (true){
-            x = (rand() % max) + min;
-            y = (rand() % max) + min;
+            random_device rd;
+            default_random_engine eng(rd());
+            uniform_int_distribution<int> distr(5, 94);
+            x = distr(eng);
+            y = distr(eng);
+
             if((xPositionsUsed.count(x)==0) && (yPositionsUsed.count(y)==0)){
                 break;
             }
@@ -75,8 +79,6 @@ float individualFitness(vector<vector<Pixel>> &pCleanImage,Pixel pixel){
     int x = pixel.getPositionX();
     int y = pixel.getPositionY();
 
-    cout<<"PosicionX a buscar: "<<x<<endl;
-    cout<<"PosicionY a buscar: "<<y<<endl;
 
     float pixelFitness = 0.0;
 
@@ -88,11 +90,11 @@ float individualFitness(vector<vector<Pixel>> &pCleanImage,Pixel pixel){
         }
 
         if(("Green" == importantColourFound(pCleanImage[x-search][y])) || ("Green" == importantColourFound(pCleanImage[x+search][y])) || ("Green" == importantColourFound(pCleanImage[x][y+search])) || ("Green" == importantColourFound(pCleanImage[x][y-search])) ){
-            pixelFitness += 1.5;
+            pixelFitness += 1.0;
         }
 
         if(("Blue" == importantColourFound(pCleanImage[x-search][y])) || ("Blue" == importantColourFound(pCleanImage[x+search][y])) || ("Blue" == importantColourFound(pCleanImage[x][y+search])) || ("Blue" == importantColourFound(pCleanImage[x][y-search])) ){
-            pixelFitness +=  1.5;
+            pixelFitness +=  1.0;
         }
     }
     return pixelFitness;
@@ -101,7 +103,6 @@ float individualFitness(vector<vector<Pixel>> &pCleanImage,Pixel pixel){
 void calculateFitness(vector<Pixel> &initialPixels,vector<vector<Pixel>> &pCleanImage){
 
     for(int idx = 0; idx<initialPixels.size();idx++){
-        cout<<"Pixel actual: "<<idx<<endl;
         initialPixels[idx].setFitness(individualFitness(pCleanImage,initialPixels[idx]));
         //cout<<initialPixels[idx].getPositionX()<<" , "<<initialPixels[idx].getPositionY()<<"  Fitness: "<<initialPixels[idx].getFitness()<<endl;
     }
@@ -109,7 +110,7 @@ void calculateFitness(vector<Pixel> &initialPixels,vector<vector<Pixel>> &pClean
 
 
 string mutation(string positionChain){
-    vector<int> randomNumbers = generateRandoms(positionChain.size());
+    vector<int> randomNumbers = generateRandoms(positionChain.size()-1,3);
     string newPositionChain;
     for(int index=0; index<randomNumbers.size();index++){
 
@@ -134,51 +135,72 @@ string mutation(string positionChain){
 
 }
 
-vector<double> createNewPositions(vector<string> chainsPosition){
-    vector<double> newPositions;
+vector<int> adjustNewPositions(string disAdjustedPositions[]){
+    vector<int> adjustedPositions;
+    for(int idx = 0;idx<4;idx++){
+        int actualPosition = toDecimal(std::stoi(disAdjustedPositions[idx]));
+        if((actualPosition - 5) <= 5){
+            actualPosition=5;
+        }
+        else if ((actualPosition + 5) >= 94){
+            actualPosition=94;
+        }
+        adjustedPositions.push_back(actualPosition);
+    }
+    return adjustedPositions;
+}
+
+
+vector<int> createNewPositions(vector<string> chainsPosition){
+    vector<int> newPositions , adjustedPositions;
     int randomIndex, middle;
-    string firstNewChain ,  secondNewChain;
-    
-    randomIndex = (rand() % chainsPosition[0].size());
+    string firstNewChain ,  secondNewChain, FNCbegin , FNCend, SNCbegin,SNCend;
+    random_device rd;
+    default_random_engine eng(rd());
+    uniform_int_distribution<int> distr(0, chainsPosition[0].size()-1);
+    randomIndex = (distr(eng));
     firstNewChain = chainsPosition[0].substr(0,randomIndex) + chainsPosition[1].substr(randomIndex) ;
     secondNewChain = chainsPosition[1].substr(0,randomIndex) + chainsPosition[0].substr(randomIndex) ;
     middle = firstNewChain.size()/2;
 
-    int probabilityNumber = (rand() % 100 + 1);
-    if(probabilityNumber<=5){
-        //Add new positions to vector
-        newPositions.push_back(toDecimal(std::stod(mutation(firstNewChain.substr(0,middle)))));
-        newPositions.push_back(toDecimal(std::stod(mutation(firstNewChain.substr(middle)))));
-        newPositions.push_back(toDecimal(std::stod(mutation(secondNewChain.substr(0,middle)))));
-        newPositions.push_back(toDecimal(std::stod(mutation(secondNewChain.substr(middle)))));
+    FNCbegin = firstNewChain.substr(0,middle);
+    FNCend = firstNewChain.substr(middle);
+    SNCbegin = secondNewChain.substr(0,middle);
+    SNCend = secondNewChain.substr(middle);
 
-    }else{
-        //Add new positions to vector
-        newPositions.push_back(toDecimal(std::stod(firstNewChain.substr(0,middle))));
-        newPositions.push_back(toDecimal(std::stod(firstNewChain.substr(middle))));
-        newPositions.push_back(toDecimal(std::stod(secondNewChain.substr(0,middle))));
-        newPositions.push_back(toDecimal(std::stod(secondNewChain.substr(middle))));
+
+    int probabilityNumber = (distr(eng) % 100);
+    if(probabilityNumber<=10){
+        FNCbegin = mutation(FNCbegin);
+        FNCend = mutation(FNCend);
+        SNCbegin = mutation(SNCbegin);
+        SNCend = mutation(SNCend);
     }
+    string disAdjustedPositions[4] = {FNCbegin,FNCend,SNCbegin,SNCend};
+    adjustedPositions = adjustNewPositions(disAdjustedPositions);
 
-
-    return newPositions;
+    /*
+    cout<<"NEW POSITIONS"<<endl;
+    for(int z =0;z<4;z++){
+        cout<<adjustedPositions[z]<<endl;
+    }
+    */
+    return adjustedPositions;
 }
 
 vector<Pixel> crossPixels(vector<Pixel> &bestPixels, Mat &imageFirstPopulation ){
-    vector<string> chainsPosition(2);
-    vector<double> newPositions(4);
+    vector<string> chainsPosition;
+    vector<int> newPositions;
     vector<Pixel> newPopulation;
-    for(int idx = 0; idx<bestPixels.size();idx+=2){
-        chainsPosition = putTogetherChains(bestPixels[idx], bestPixels[idx + 1]);
-        newPositions = createNewPositions(chainsPosition);
 
+    vector<int> randomIndexes = generateRandoms(9,10);
+    
+    for(int idx = 0; idx<bestPixels.size();idx+=2){
+        chainsPosition = putTogetherChains(bestPixels[randomIndexes[idx]], bestPixels[randomIndexes[idx]]);
+        newPositions = createNewPositions(chainsPosition);
         //Create an array of new pixels
         newPopulation.push_back(Pixel(180,0,20,newPositions[0],newPositions[1],0));
         newPopulation.push_back(Pixel(180,0,20,newPositions[2],newPositions[3],0));
-
-        imageFirstPopulation.at<Vec3b>(newPositions[0],newPositions[1]) = Vec3b(20,0,180);
-        imageFirstPopulation.at<Vec3b>(newPositions[2],newPositions[3]) = Vec3b(20,0,180);
-        imshow("windowName",imageFirstPopulation);
     }
     return newPopulation;
 }
@@ -205,7 +227,10 @@ vector<Pixel> chooseBestPixels(vector<Pixel> &initialPixels){
     while (pixelsChosen!=10){
         float pixelFitness = initialPixels[idx].getFitness();
         float chosenProbability = (pixelFitness*100)/topFitness;
-        float randomChoice = rand() % 100;
+        random_device rd;
+        default_random_engine eng(rd());
+        uniform_int_distribution<int> distr(1, 100);
+        float randomChoice = distr(eng);
         if(randomChoice<=chosenProbability && randomChoice!=0.0){
             bestPixels.push_back(initialPixels[idx]);
             pixelsChosen++;
@@ -231,6 +256,14 @@ void replaceFirstPopulation(vector<Pixel> &initialPixels, vector<Pixel> newPixel
     }
 }
 
+double averageFitness(vector<Pixel> poblation){
+    double totalFitness = 0.0;
+    for(int idx = 0;idx<50;idx++){
+        totalFitness+=poblation[idx].getFitness();
+    }
+    return totalFitness/50;
+}
+
 
 void mainGenetic(){
     vector<Pixel> initialPixels(50); //Initiliaze the vector of the initial pixels to choose
@@ -238,9 +271,10 @@ void mainGenetic(){
     int dimensionX = 100; //Dimensions of the images
     int dimensionY = 100;
 
-    string imagePath = "C:/Users/Sebastian/Desktop/TEC/IVSemestre/Analisis de algoritmos/GeneticAlgorithms/Laberinto.png"; //Path of the image
+    string imagePath = "C:/Users/luist/OneDrive/Escritorio/GeneticAlgorithms/Laberinto.png"; //Path of the image
 
     Mat imageFirstPopulation = imread(imagePath);
+    Mat draftImage = imageFirstPopulation;
 
     vector<vector<Pixel>> imageInfo( dimensionX , vector<Pixel> (dimensionY));        //Generate initial poblation
     uploadImageInfo(imageInfo);
@@ -250,17 +284,25 @@ void mainGenetic(){
 
     generateInitialPixels(initialPixels,imageInfo, imageFirstPopulation);    //Generate the initial pixels for the array
 
-    for (int index = 0; index<10; index++){
+    double avgFitness = 0.0;
+    while(avgFitness<=5){
 
-        calculateFitness(initialPixels,cleanImage);
-        cout<<"Buscando error fitness"<<endl;                             //Calculates the fitness of the initial poblation
+        calculateFitness(initialPixels,cleanImage);         //Calculates the fitness of the initial poblation                          
 
         vector<Pixel> bestPixels = chooseBestPixels(initialPixels);           //Choose the best pixels.
-
-        vector<Pixel> newPixelPopulation = crossPixels(bestPixels, imageFirstPopulation);
-
+        
+        Mat newImage = draftImage;
+        vector<Pixel> newPixelPopulation = crossPixels(bestPixels, newImage);
         replaceFirstPopulation(initialPixels, newPixelPopulation);
-        cout<<"Buscando error"<<endl;
+        avgFitness = averageFitness(initialPixels);
     }
-    
+    cout<<"Resultado final"<<endl;
+    Mat finalImage = imread(imagePath);
+    for(int idx = 0;idx<50;idx++){
+        Pixel p = initialPixels[idx];
+        cout<<"Posicion en X "<<p.getPositionX()<<"- Posicion en Y "<<p.getPositionY()<<endl;
+        finalImage.at<Vec3b>(p.getPositionX(),p.getPositionY()) = Vec3b(20,0,180);
+    }
+    imshow("Final",finalImage);
+
 }

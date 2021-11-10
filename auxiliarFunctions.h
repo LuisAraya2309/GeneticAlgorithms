@@ -53,7 +53,7 @@ void uploadImageInfo(vector<vector<Pixel>> &pImageInfo){
         - "C:/Users/Sebastian/Desktop/TEC/IVSemestre/Analisis de algoritmos/GeneticAlgorithms/Laberinto.png"
         - "C:/Users/luist/OneDrive/Escritorio/GeneticAlgorithms/Laberinto.png"
     */
-    string imagePath =  "C:/Users/luist/OneDrive/Escritorio/GeneticAlgorithms/Laberinto.png";
+    string imagePath =  "C:/Users/Sebastian/Desktop/TEC/IVSemestre/Analisis de algoritmos/GeneticAlgorithms/Laberinto.png";
     Mat colorImage = imread(imagePath);
     int blueChannel; int greenChannel; int redChannel;
     if(existsImage(colorImage)){

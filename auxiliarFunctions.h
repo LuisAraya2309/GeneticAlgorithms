@@ -24,23 +24,21 @@ bool existsImage(Mat pColorImage){
     try{
         int rowsValue = pColorImage.rows;
         if(rowsValue > 0){
-            cout<<"The image was found successfully"<<endl;
             return true;
         } 
         else{
-            throw(rowsValue);
+            throw(false);
         }
             
     }
-    catch(int pRowsValue){
-        cout<<"The image does not exist, the size is:  "<<pRowsValue<<"x"<<pRowsValue<<endl;
-        return false;
+    catch(bool status){
+        return status;
     }
 }
 
 
 
-void uploadImageInfo(vector<vector<Pixel>> &pImageInfo){
+void uploadImageInfo(vector<vector<Pixel>> &pImageInfo, Mat colorImage){
     /*
     Purpose: 
         -Load the first image information and converts it to a matrix of colors for futures functionalities.
@@ -53,8 +51,6 @@ void uploadImageInfo(vector<vector<Pixel>> &pImageInfo){
         - "C:/Users/Sebastian/Desktop/TEC/IVSemestre/Analisis de algoritmos/GeneticAlgorithms/Laberinto.png"
         - "C:/Users/luist/OneDrive/Escritorio/GeneticAlgorithms/Laberinto.png"
     */
-    string imagePath =  "C:/Users/Sebastian/Desktop/TEC/IVSemestre/Analisis de algoritmos/GeneticAlgorithms/Laberinto.png";
-    Mat colorImage = imread(imagePath);
     int blueChannel; int greenChannel; int redChannel;
     if(existsImage(colorImage)){
         for (int imageRows = 0; imageRows < colorImage.rows; imageRows++){
@@ -63,7 +59,7 @@ void uploadImageInfo(vector<vector<Pixel>> &pImageInfo){
                 greenChannel = colorImage.at<Vec3b>(imageRows, imageColumns)[1];
                 blueChannel = colorImage.at<Vec3b>(imageRows, imageColumns)[0];
 
-                Pixel addingPixel = Pixel(redChannel,greenChannel,blueChannel,imageRows,imageColumns,0.0);
+                Pixel addingPixel = Pixel(redChannel,greenChannel,blueChannel,imageRows,imageColumns,0.0,0.0);
 
                 pImageInfo[imageRows][imageColumns] = addingPixel;
                 
@@ -109,25 +105,24 @@ int toBinary(int numberToConvert){
     binario=0;
     while(numberToConvert/2!=0){
         digito = numberToConvert % 2;
-        binario = binario + digito * pow(10,exp);
+        binario = binario + digito * (int) pow(10,exp);
         exp++;
         numberToConvert=numberToConvert/2;
     }
-    binario = binario + numberToConvert * pow(10,exp);
+    binario = binario + numberToConvert * (int) pow(10,exp);
     return binario;
 }
 
 int toDecimal(int numerToConvert){
-    int exp, digit;
-    int decimal;
+    int exp, digit, decimal;
     exp = 0; decimal = 0;
     while(((int)(numerToConvert/10))!=0){
         digit = (int)numerToConvert % 10;
-        decimal = decimal + digit * pow(2.0,exp);
+        decimal = decimal + digit * (int) pow(2.0,exp);
         exp++;
         numerToConvert = (int)(numerToConvert/10);
     }
-    decimal=decimal + numerToConvert * pow(2.0,exp);
+    decimal=decimal + numerToConvert * (int) pow(2.0,exp);
 
     return decimal;
 }
@@ -144,8 +139,8 @@ vector<string> putTogetherChains(Pixel firstPixel, Pixel secondPixel){
     chainsPositions[0] = to_string(firstXPosition) + to_string(firstYPosition);
     chainsPositions[1] = to_string(secondXPosition) + to_string(secondYPosition);
     
-    int lenFirst = chainsPositions[0].length();
-    int lenSecond = chainsPositions[1].length();
+    int lenFirst =  static_cast<int>(chainsPositions[0].length());
+    int lenSecond =  static_cast<int>(chainsPositions[1].length());
     int neededBits;
     int idxChanged;
     string filledChain;
@@ -174,8 +169,8 @@ vector<string> putTogetherChains(Pixel firstPixel, Pixel secondPixel){
 
 bool checkNumber(vector<int> arrayNumbers, int number){
 
-    if(arrayNumbers.size() != 0){
-        for(int index=0; index< arrayNumbers.size(); index++){
+    if(static_cast<int>(arrayNumbers.size()) != 0){
+        for(int index=0; index< static_cast<int>(arrayNumbers.size()); index++){
             if(arrayNumbers[index] == number){
                 return false;
             }
@@ -188,10 +183,10 @@ bool checkNumber(vector<int> arrayNumbers, int number){
 }
 
 
-vector<int> generateRandoms(int size,int randomAmount){
+vector<int> generateRandoms(int size, int randomAmount){
     vector<int> arrayNumbers;
     int randomNumber;
-    while (arrayNumbers.size()<randomAmount){
+    while (static_cast<int>(arrayNumbers.size())<randomAmount){
         random_device rd;
         default_random_engine eng(rd());
         uniform_int_distribution<int> distr(0, size);
@@ -201,4 +196,13 @@ vector<int> generateRandoms(int size,int randomAmount){
         }
     }
     return arrayNumbers;
+}
+
+Mat createImage(vector<Pixel> pixelsArray, Mat newImage){
+    
+    for(int idx = 0;idx<static_cast<int>(pixelsArray.size());idx++){
+        Pixel p = pixelsArray[idx];
+        newImage.at<Vec3b>(p.getPositionX(),p.getPositionY()) = Vec3b(20,0,180);
+    }
+    return newImage;
 }

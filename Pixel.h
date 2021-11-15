@@ -1,3 +1,4 @@
+#pragma once
 #include <iostream>
 
 using namespace std;
@@ -5,7 +6,7 @@ using namespace std;
 class Pixel{
     //Atributes
     int redValue, greenValue,blueValue,positionX,positionY;
-    float fitness; 
+    float fitness, fitnessPosRed; 
 
     //Constructor
 
@@ -17,10 +18,11 @@ class Pixel{
             this->positionX = 0;
             this->positionY = 0;
             this->fitness = 0.0;
+            this->fitnessPosRed = 0,0;
         }
 
 
-        Pixel(int pRedValue,int pGreenValue,int pBlueGreen,int pX,int pY,float  pFitness){
+        Pixel(int pRedValue,int pGreenValue,int pBlueGreen,int pX,int pY,float  pFitness, float pFitnessPosRed){
 
             this->redValue = pRedValue;
             this->greenValue = pGreenValue;
@@ -28,10 +30,11 @@ class Pixel{
             this->positionX = pX;
             this->positionY = pY;
             this->fitness = pFitness;
+            this->fitnessPosRed = pFitnessPosRed;
         }
 
         void printPixel(){
-            cout<<"R: "<<redValue<<" ,G: "<<greenValue<<" ,B: "<<blueValue<<" ,X: "<<positionX<<" ,Y: "<<positionY<<" ,Fitness: "<<fitness<<endl;
+            cout<<"R: "<<redValue<<" ,G: "<<greenValue<<" ,B: "<<blueValue<<" ,X: "<<positionX<<" ,Y: "<<positionY<<" ,Fitness: "<<fitness<<" ,Fitness pos red: "<<fitnessPosRed<<endl;
         }
 
         void printPixelSegment(){
@@ -64,6 +67,10 @@ class Pixel{
             fitness = pFitness;
         }
 
+        void setFitnessPR(float pFitnessPR){
+            fitnessPosRed = pFitnessPR;
+        }
+
         // Getter
 
         int getRed() {
@@ -88,7 +95,11 @@ class Pixel{
             return fitness;
         }
 
+        float getFitnessPR(){
+            return fitnessPosRed;
+        }
+
         static bool compareByFitness(Pixel &a, Pixel &b) {
-            return a.fitness < b.fitness;
+            return a.fitnessPosRed < b.fitnessPosRed;
     }
 };

@@ -12,7 +12,7 @@
 
 using namespace std;
 
-void generateInitialPixels(vector<Pixel> &initialPixels,vector<vector<Pixel>> &pImageInfo, Mat &imageFirstPopulation){
+void generateInitialPixels(vector<Pixel> &initialPixels,vector<vector<Pixel>> &pImageInfo, Mat &imageFirstPopulation, Mat &firstPopulation){
     int max = 90;
     int min = 5;
     map<int,int> xPositionsUsed;
@@ -46,9 +46,9 @@ void generateInitialPixels(vector<Pixel> &initialPixels,vector<vector<Pixel>> &p
 
         // set pixel
         imageFirstPopulation.at<Vec3b>(x,y) = Vec3b(20,0,180);
+        firstPopulation.at<Vec3b>(x,y) = Vec3b(20,0,180);
+        
     }
-    imshow("windowName",imageFirstPopulation);
-    waitKey(0);
 }
 
 string returnColor(Pixel pixel){
@@ -450,8 +450,9 @@ void mainGenetic(){
     unsigned t0, t1;
     string imagePath = "C:/Users/Sebastian/Desktop/TEC/IVSemestre/Analisis de algoritmos/GeneticAlgorithms/Laberinto.png"; //Path of the image
     Mat imageFirstPopulation = imread(imagePath);
+    Mat firstPopulation = imread(imagePath);
     Mat draftImage = imageFirstPopulation;
-    Mat newImage, finalImage;
+    Mat newImage;
     vector<Pixel> bestPixels;
     vector<Pixel> newPixelPopulation;
     vector<vector<Pixel>> imageInfo( dimensionX , vector<Pixel> (dimensionY));        //Generate initial poblation
@@ -459,14 +460,13 @@ void mainGenetic(){
     vector<vector<Pixel>> imagePosRed( dimensionX , vector<Pixel> (dimensionY));        //Stores the original copy of the image
     /*End Instantiate variables*/
 
-    
-
     uploadImageInfo(imageInfo,draftImage);
 
     uploadImageInfo(cleanImage,draftImage);
 
     t0 = clock(); //Start chronometer
-    generateInitialPixels(initialPixels,imageInfo, imageFirstPopulation);    //Generate the initial pixels for the array
+    generateInitialPixels(initialPixels,imageInfo, imageFirstPopulation, firstPopulation);    //Generate the initial pixels for the array
+
     cout<<"Procesando..."<<endl;
     while(avgFitness<=7){
         draftImage = imread(imagePath);
@@ -486,88 +486,106 @@ void mainGenetic(){
 
         PixelGenerations.push_back(Generation(generation,initialPixels,(float) avgFitness));
     }
-
+    generation -= 1;
     t1 = clock();//End chronometer
     Mat Image;
     double time = (double(t1-t0)/CLOCKS_PER_SEC);
-    finalImage = imread(imagePath);
-    finalImage = createImage(PixelGenerations[generation-1].getPixelList(), finalImage);
     Image = imread(imagePath);
-    int m , generacion, opcion;
-    bool salir = true; bool regresar = true;
+    int opcion;
     vector<Pixel> listaGeneracion;
-    while (salir){
+    
+    do { 
+        system("cls");      // Para limpiar la pantalla 
+         
+         
         cout<<"\t\t\tElija una opcion\n\n";
 
         cout<<"1  Consultar tiempo de compilacion\n";
-        cout<<"2  Ver resultado del algoritmo\n";
+        cout<<"2  Ver primera generacion\n";
         cout<<"3  Consultar el porcentaje final de fitness\n";
         cout<<"4  Consultar la cantidad de generaciones \n";
         cout<<"5  Consultar una generacion especifica\n";
         cout<<"6  Salir\n\n";
-        cin>>m;
-        
-        switch(m)
-        {
-        case 1:cout <<"Tiempo de ejecucion final: " << time <<" segundos"<< endl;break;
+         
+        cout << "\nIngrese una opcion: "; 
+        cin >> opcion;
+        cout<<endl; 
+         
+        switch (opcion) { 
+            
+            case 1: 
+                cout <<"Tiempo de ejecucion final: " << time <<" segundos"<< endl;
+                system("pause>nul"); 
+                break;  
+            case 2: 
+                resize(firstPopulation,firstPopulation,Size(700,700));
+                imshow("Primera poblacion",firstPopulation);
+                waitKey(0);
+                system("pause>nul"); 
+                break;    
+            case 3: 
+                cout<<"Porcentaje de Fitness final: "<<avgFitness<<endl;
+                system("pause>nul"); // Pausa 
+                break;
 
-        case 2:
-            resize(finalImage,finalImage,Size(700,700));
-            imshow("Final",finalImage);
-            break;
+            case 4: 
+                cout<<"Generacion final: "<<generation<<endl;
+                system("pause>nul"); // Pausa 
+                break;
 
-        case 3:cout<<"Porcentaje de Fitness final: "<<avgFitness<<endl;break;
+            case 5: 
+				int generacion;                 
+                cout<<"Ingrese el numero de la generacion a consultar: "; 
+                cin>> generacion;
+                int opcion; 
+                do { 
+                    system("cls");      // Para limpiar la pantalla 
+                    
+                    cout<<endl<<"\t\t\tElija una opcion\n\n";
 
-        case 4:cout<<"Generacion final: "<<generation<<endl;break;
+                    cout<<"1  Visualizar la poblacion \n";
+                    cout<<"2  Visualizar el porcentaje de fitness\n";
+                    cout<<"3  Visualizar el resultado de la generacion\n";
+                    cout<<"4  Retroceder\n\n";
+                    cout << "\nIngrese una opcion: "; 
+                    cin >> opcion; 
+                    cout<<endl; 
+                        
+                    switch (opcion) { 
+                            
+                        case 1: 
+                            cout <<"Generacion: "<<endl;
+                            listaGeneracion = PixelGenerations[generacion].getPixelList();
+                            for(int pixel = 0; pixel < listaGeneracion.size(); pixel++){
+                                listaGeneracion[pixel].printPixel();
+                            }
+                            system("pause>nul"); 
+                            break;  
+                        case 2: 
+                            cout<<"Porcentaje de Fitness: "<<PixelGenerations[generacion].getAverageFitness()<<endl;
+                            system("pause>nul"); 
+                            break;    
+                        case 3: 
+                            Image = createImage(PixelGenerations[generacion].getPixelList(), Image);
+                            resize(Image,Image,Size(700,700));
+                            imshow("Generacion",Image);
+                            waitKey(0);
+                            system("pause>nul"); // Pausa 
+                            break;                    
+                    } 
+                }while (opcion != 4); 
+                system("pause>nul"); // Pausa 
+                break;    	        
+    	} 		 
+	}while (opcion != 6);
 
-        case 5:
-            while(regresar){
-
-                cout<<"Ingrese el numero de la generacion a consultar: \n";
-                cin>>generacion; 
-
-                cout<<endl<<"\t\t\tElija una opcion\n\n";
-
-                cout<<"1  Visualizar la poblacion \n";
-                cout<<"2  Visualizar el porcentaje de fitness\n";
-                cout<<"3  Visualizar el resultado de la generacion\n";
-                cout<<"4  Retroceder\n\n";
-                cin>>opcion;
-
-                switch(opcion)
-                {
-                case 1:
-                    cout <<"Generación: "<<endl;
-                    listaGeneracion = PixelGenerations[generacion].getPixelList();
-                    for(int pixel = 0; pixel < listaGeneracion.size(); pixel++){
-                        listaGeneracion[pixel].printPixel();
-                    }
-                    break;
-
-                case 2: 
-                    cout<<"Porcentaje de Fitness: "<<PixelGenerations[generacion].getAverageFitness()<<endl;
-                    break;
-                case 3:
-
-                    Image = createImage(PixelGenerations[generacion].getPixelList(), Image);
-                    resize(Image,Image,Size(700,700));
-                    imshow("Generación",Image);
-                    waitKey(0);
-                    break;
-
-                case 4: regresar = false; break;
-
-                default: cout<<"El valor ingresado no esta en el menu"<<endl;
-                }
-                cin.ignore();
-            }
-
-        case 6:cout<<"Gracias por utilizar este algoritmo!"<<endl; salir = false; break;
-
-        default: cout<<"El valor ingresado no esta en el menu"<<endl;
-        }
-        
-        cin.ignore();
-    }
-       
 }
+
+
+
+
+
+
+
+
+

@@ -8,7 +8,6 @@ using namespace std;
 class Generation{
     //Atributes
     int generationNumber;
-    Mat Image;
     vector<Pixel> pixelList;
     float averageFitness; 
 
@@ -16,10 +15,9 @@ class Generation{
 
     public:
 
-        Generation(int pGenerationNumber, Mat pImage, vector<Pixel> pPixelList, float pAverageFitness){
+        Generation(int pGenerationNumber, vector<Pixel> pPixelList, float pAverageFitness){
 
             this->generationNumber = pGenerationNumber;
-            this->Image = pImage;
             this->pixelList = pPixelList;
             this->averageFitness = pAverageFitness;
         }
@@ -28,10 +26,6 @@ class Generation{
 
         void setGenerationN( int pGenerationNumber) {
             generationNumber= pGenerationNumber;
-        }
-
-        void setImage( Mat pImage) {
-            Image = pImage;
         }
 
         void setPixelList( vector<Pixel> pPixelList) {
@@ -46,10 +40,6 @@ class Generation{
 
        int getGenerationN() {
             return generationNumber;
-        }
-
-        Mat getImage() {
-            return Image;
         }
 
         vector<Pixel> getPixelList() {

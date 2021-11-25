@@ -6,7 +6,7 @@ using namespace std;
 class Pixel{
     //Atributes
     int redValue, greenValue,blueValue,positionX,positionY;
-    float fitness, fitnessPosRed; 
+    float fitness, fitnessPosRed;
 
     //Constructor
 
@@ -21,8 +21,7 @@ class Pixel{
             this->fitnessPosRed = 0,0;
         }
 
-
-        Pixel(int pRedValue,int pGreenValue,int pBlueGreen,int pX,int pY,float  pFitness, float pFitnessPosRed){
+        Pixel(int pRedValue,int pGreenValue,int pBlueGreen,int pX,int pY,float  pFitness, float pFitnessPosRed ){
 
             this->redValue = pRedValue;
             this->greenValue = pGreenValue;

@@ -9,7 +9,5 @@ using namespace std;
 
 int main(int, char**) {
     mainGenetic();
-    waitKey(0);
-
     return 0;
 }

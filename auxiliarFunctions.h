@@ -58,7 +58,6 @@ void uploadImageInfo(vector<vector<Pixel>> &pImageInfo, Mat colorImage){
                 redChannel = colorImage.at<Vec3b>(imageRows, imageColumns)[2];
                 greenChannel = colorImage.at<Vec3b>(imageRows, imageColumns)[1];
                 blueChannel = colorImage.at<Vec3b>(imageRows, imageColumns)[0];
-
                 Pixel addingPixel = Pixel(redChannel,greenChannel,blueChannel,imageRows,imageColumns,0.0,0.0);
 
                 pImageInfo[imageRows][imageColumns] = addingPixel;
@@ -205,4 +204,9 @@ Mat createImage(vector<Pixel> pixelsArray, Mat newImage){
         newImage.at<Vec3b>(p.getPositionX(),p.getPositionY()) = Vec3b(20,0,180);
     }
     return newImage;
+}
+
+void Clear()
+{
+    cout << "\x1B[2J\x1B[H";
 }

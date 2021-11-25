@@ -8,6 +8,7 @@
 #include <iostream>
 #include <ctime>
 #include "Generation.h"
+#include <conio.h>
 
 using namespace std;
 
@@ -35,6 +36,7 @@ void generateInitialPixels(vector<Pixel> &initialPixels,vector<vector<Pixel>> &p
         int redChannel = pImageInfo[x][y].getRed();
         int greenChannel = pImageInfo[x][y].getGreen();
         int blueChannel = pImageInfo[x][y].getBlue();
+        vector<Pixel> parents;
         initialPixels[idx] = Pixel(redChannel,greenChannel,blueChannel,x,y,0.0,0.0);
 
         //Set the first population in the maze matrix 
@@ -352,8 +354,8 @@ vector<Pixel> crossPixels(vector<Pixel> &bestPixels, Mat &imageFirstPopulation )
         }
        
         //Create an array of new pixels
-        newPopulation.push_back(Pixel(180,0,20,newPositions[0],newPositions[1],0,0));
-        newPopulation.push_back(Pixel(180,0,20,newPositions[2],newPositions[3],0,0));
+        newPopulation.push_back(Pixel(180,0,20,newPositions[0],newPositions[1],0.0,0.0));
+        newPopulation.push_back(Pixel(180,0,20,newPositions[2],newPositions[3],0.0,0.0));
     }
     return newPopulation;
 }
@@ -457,7 +459,7 @@ void mainGenetic(){
     vector<vector<Pixel>> imagePosRed( dimensionX , vector<Pixel> (dimensionY));        //Stores the original copy of the image
     /*End Instantiate variables*/
 
-    cout<<"Procesando..."<<endl;
+    
 
     uploadImageInfo(imageInfo,draftImage);
 
@@ -465,8 +467,7 @@ void mainGenetic(){
 
     t0 = clock(); //Start chronometer
     generateInitialPixels(initialPixels,imageInfo, imageFirstPopulation);    //Generate the initial pixels for the array
-
-
+    cout<<"Procesando..."<<endl;
     while(avgFitness<=7){
         draftImage = imread(imagePath);
         calculateFitness(initialPixels,cleanImage);         //Calculates the fitness of the initial poblation
@@ -476,28 +477,97 @@ void mainGenetic(){
         calculateFitnessPosRed(initialPixels,imagePosRed); //Calculate the fitness pos red                  
 
         bestPixels = chooseBestPixels(initialPixels);           //Choose the best pixels.
-        
+
         newPixelPopulation = crossPixels(bestPixels, newImage);
 
         replaceFirstPopulation(initialPixels, newPixelPopulation,imageFirstPopulation);
-
-        newImage = createImage(initialPixels,draftImage);
         avgFitness = averageFitness(initialPixels);
         generation++;
 
-        PixelGenerations.push_back(Generation(generation,newImage,initialPixels,(float) avgFitness));
+        PixelGenerations.push_back(Generation(generation,initialPixels,(float) avgFitness));
     }
 
     t1 = clock();//End chronometer
+    Mat Image;
     double time = (double(t1-t0)/CLOCKS_PER_SEC);
     finalImage = imread(imagePath);
+    finalImage = createImage(PixelGenerations[generation-1].getPixelList(), finalImage);
+    Image = imread(imagePath);
+    int m , generacion, opcion;
+    bool salir = true; bool regresar = true;
+    vector<Pixel> listaGeneracion;
+    while (salir){
+        cout<<"\t\t\tElija una opcion\n\n";
 
-    cout<<"Resultado final"<<endl;
-    cout<<"Generacion: "<<generation<<endl;
-    cout<<"Porcentaje de Fitness utilizado: "<<avgFitness<<endl;
-    cout <<"Tiempo de ejecucion: " << time <<" segundos"<< endl;
+        cout<<"1  Consultar tiempo de compilacion\n";
+        cout<<"2  Ver resultado del algoritmo\n";
+        cout<<"3  Consultar el porcentaje final de fitness\n";
+        cout<<"4  Consultar la cantidad de generaciones \n";
+        cout<<"5  Consultar una generacion especifica\n";
+        cout<<"6  Salir\n\n";
+        cin>>m;
+        
+        switch(m)
+        {
+        case 1:cout <<"Tiempo de ejecucion final: " << time <<" segundos"<< endl;break;
 
-    finalImage = PixelGenerations[generation-1].getImage();
-    //resize(finalImage,finalImage,Size(700,700));
-    imshow("Final",finalImage);
+        case 2:
+            resize(finalImage,finalImage,Size(700,700));
+            imshow("Final",finalImage);
+            break;
+
+        case 3:cout<<"Porcentaje de Fitness final: "<<avgFitness<<endl;break;
+
+        case 4:cout<<"Generacion final: "<<generation<<endl;break;
+
+        case 5:
+            while(regresar){
+
+                cout<<"Ingrese el numero de la generacion a consultar: \n";
+                cin>>generacion; 
+
+                cout<<endl<<"\t\t\tElija una opcion\n\n";
+
+                cout<<"1  Visualizar la poblacion \n";
+                cout<<"2  Visualizar el porcentaje de fitness\n";
+                cout<<"3  Visualizar el resultado de la generacion\n";
+                cout<<"4  Retroceder\n\n";
+                cin>>opcion;
+
+                switch(opcion)
+                {
+                case 1:
+                    cout <<"Generación: "<<endl;
+                    listaGeneracion = PixelGenerations[generacion].getPixelList();
+                    for(int pixel = 0; pixel < listaGeneracion.size(); pixel++){
+                        listaGeneracion[pixel].printPixel();
+                    }
+                    break;
+
+                case 2: 
+                    cout<<"Porcentaje de Fitness: "<<PixelGenerations[generacion].getAverageFitness()<<endl;
+                    break;
+                case 3:
+
+                    Image = createImage(PixelGenerations[generacion].getPixelList(), Image);
+                    resize(Image,Image,Size(700,700));
+                    imshow("Generación",Image);
+                    waitKey(0);
+                    break;
+
+                case 4: regresar = false; break;
+
+                default: cout<<"El valor ingresado no esta en el menu"<<endl;
+                }
+                cin.ignore();
+            }
+
+        case 6:cout<<"Gracias por utilizar este algoritmo!"<<endl; salir = false; break;
+
+        default: cout<<"El valor ingresado no esta en el menu"<<endl;
+        }
+        
+        cin.ignore();
+    }
+       
 }
